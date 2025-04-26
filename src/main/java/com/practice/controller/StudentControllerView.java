@@ -150,24 +150,46 @@ public class StudentControllerView {
 	StudentDto update= service.updateStudent(id , dto);
 	return new ResponseEntity<>(update ,HttpStatus.OK) ;
 	}
+//modifying update for the http
 	
-	@DeleteMapping("/deleteReg")
-	public ResponseEntity<?> deleteStudent( @RequestParam Long id ) {
-	StudentDto delete= service.deleteStudent(id);
-	return new ResponseEntity<>(delete ,HttpStatus.OK) ;
-	}
+	
+	
+	
+	
+//	@DeleteMapping("/deleteReg")
+//	public ResponseEntity<?> deleteStudent( @RequestParam Long id ) {
+//	StudentDto delete= service.deleteStudent(id);
+//	return new ResponseEntity<>(delete ,HttpStatus.OK) ;
+//	}
+	
+//modified delete reg for http purpose
+	   @RequestMapping("/deleteReg")
+	    public String deleteStudent(@RequestParam Long id, ModelMap model) {
+	        service.deleteStudent(id);
+	        // Optional: add success message to show after deletion
+	        model.addAttribute("msg", "Student deleted successfully.");
+	        return "redirect:/listReg";  // Redirect to list page after deletion
+	    }
 	
 //find student by id
-	@GetMapping("/FindByIdReg")
-	public ResponseEntity<?>  fetchbyid(@RequestParam Long id) {
-		StudentDto fetchid =service.fetchbyid(id);
-		if (fetchid == null) {
-	        return new ResponseEntity<>("Student not found", HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(fetchid, HttpStatus.OK);
-
-		}
-	
+//	@GetMapping("/FindByIdReg")
+//	public ResponseEntity<?>  fetchbyid(@RequestParam Long id) {
+//		StudentDto fetchid =service.fetchbyid(id);
+//		if (fetchid == null) {
+//	        return new ResponseEntity<>("Student not found", HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<>(fetchid, HttpStatus.OK);
+//
+//		}
+//	
+//lets change or use this for update registration page
+	   @GetMapping("/FindByIdReg")
+		  public String getbyid(@RequestParam long id, 
+				  Model model) { //Which ever id comes here we are fetching it and using model
+			  StudentDto fetchid =service.fetchbyid(id);
+			  model.addAttribute("fetchid",fetchid);
+		        return "update_registration";
+		  }
 	
 //find student by email
 		@GetMapping("/FindByEmailReg")
