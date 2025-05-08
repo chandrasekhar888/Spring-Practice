@@ -145,15 +145,13 @@ public class StudentControllerView {
 	  }
 	
 //update
-	@PutMapping("/updateReg")
-	public ResponseEntity<StudentDto> updateStudent( @RequestParam Long id ,@RequestBody StudentDto dto ) {
-	StudentDto update= service.updateStudent(id , dto);
-	return new ResponseEntity<>(update ,HttpStatus.OK) ;
-	}
-//modifying update for the http
+	@RequestMapping("/updateReg")
+    public String updateStudent(@ModelAttribute StudentDto dto) {
+        service.updateStudent(dto.getId(), dto);
+	  return "redirect:/listReg";
+    }	
 	
-	
-	
+
 	
 	
 //	@DeleteMapping("/deleteReg")
@@ -168,8 +166,17 @@ public class StudentControllerView {
 	        service.deleteStudent(id);
 	        // Optional: add success message to show after deletion
 	        model.addAttribute("msg", "Student deleted successfully.");
-	        return "redirect:/listReg";  // Redirect to list page after deletion
+	        return "redirect:/listReg";   // Redirect to list page after deletion
 	    }
+	   
+	//After Delete In order to page reload we use 
+	   @RequestMapping("/listReg")
+	   public String listStudents(Model model) {
+	       List<StudentDto> students = service.findstudent(0, 5, "id", "asc");  // Adjust pagination if needed
+	       model.addAttribute("students", students);
+	       return "list_registration";  // Your JSP page to display the list
+	   }
+
 	
 //find student by id
 //	@GetMapping("/FindByIdReg")
